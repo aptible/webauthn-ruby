@@ -19,10 +19,6 @@ module WebAuthn
       @client_data ||= WebAuthn::ClientData.new(client_data_json)
     end
 
-    private
-
-    attr_reader :client_data_json
-
     def valid_type?
       client_data.type == type
     end
@@ -38,6 +34,10 @@ module WebAuthn
     def valid_rp_id?(rp_id)
       OpenSSL::Digest::SHA256.digest(rp_id) == authenticator_data.rp_id_hash
     end
+
+    private
+
+    attr_reader :client_data_json
 
     def rp_id_from_origin(original_origin)
       URI.parse(original_origin).host
