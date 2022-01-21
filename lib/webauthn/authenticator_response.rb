@@ -6,13 +6,21 @@ module WebAuthn
       @client_data_json = client_data_json
     end
 
-    def valid?(original_challenge, original_origin, rp_id: nil)
-      valid_type? &&
-        valid_challenge?(original_challenge) &&
-        valid_origin?(original_origin) &&
-        valid_rp_id?(rp_id || rp_id_from_origin(original_origin)) &&
-        authenticator_data.valid? &&
-        authenticator_data.user_flagged?
+    def valid!(original_challenge, original_origin, rp_id: nil)
+      raise WebAuthn::InvalidCredentials, 'Invalid type' unless valid_type
+
+      raise WebAuthn::InvalidCredentials, 'Invalid challenge' unless valid_challenge?(original_challenge)
+
+      raise WebAuthn::InvalidCredentials, 'Invalid origin' unless valid_origin?(original_origin)
+
+      valid_rp = valid_rp_id?(rp_id || rp_id_from_origin(original_origin))
+      raise WebAuthn::InvalidCredentials, 'Invalid rp_id' unless valid_rp
+
+      raise WebAuthn::InvalidCredentials, 'Invalid authenticator data' unless authenticator_data.valid?
+
+      raise WebAuthn::InvalidCredentials, 'User flagged' unless authenticator_data.user_flagged?
+
+      true
     end
 
     def client_data
