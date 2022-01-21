@@ -7,7 +7,7 @@ module WebAuthn
     end
 
     def valid!(original_challenge, original_origin, rp_id: nil)
-      raise WebAuthn::InvalidCredentials, 'Invalid type' unless valid_type
+      raise WebAuthn::InvalidCredentials, 'Invalid type' unless valid_type?
 
       raise WebAuthn::InvalidCredentials, 'Invalid challenge' unless valid_challenge?(original_challenge)
 
