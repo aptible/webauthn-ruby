@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 2.3"
+  spec.required_ruby_version = ">= 2.2"
 
   spec.add_dependency "awrence", "~> 1.1"
   spec.add_dependency "bindata", "~> 2.4"
@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "jwt", [">= 1.5", "< 3.0"]
   spec.add_dependency "openssl", "~> 2.0"
   spec.add_dependency "securecompare", "~> 1.0"
+  spec.add_dependency "base64url", "~> 1.0.1"
 
   spec.add_development_dependency "appraisal", "~> 2.2.0"
   spec.add_development_dependency "bundler", ">= 1.17", "< 3.0"
