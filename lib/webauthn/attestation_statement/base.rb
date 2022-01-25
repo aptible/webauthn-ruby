@@ -41,7 +41,7 @@ module WebAuthn
       attr_reader :statement
 
       def matching_aaguid?(attested_credential_data_aaguid)
-        extension = attestation_certificate.try(:extensions).try(:detect, { |ext| ext.oid == AAGUID_EXTENSION_OID })
+        extension = attestation_certificate.try(:extensions).detect { |ext| ext.oid == AAGUID_EXTENSION_OID }
         if extension
           # `extension.value` mangles data into ASCII, so we must manually compare bytes
           # see https://github.com/ruby/openssl/pull/234
