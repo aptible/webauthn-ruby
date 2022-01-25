@@ -34,7 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "awrence", "~> 1.1"
   spec.add_dependency "bindata", "~> 2.4"
   spec.add_dependency "cbor", "~> 0.5.9"
-  spec.add_dependency "cose", "~> 0.8.0"
   spec.add_dependency "jwt", [">= 1.5", "< 3.0"]
   spec.add_dependency "securecompare", "~> 1.0"
   spec.add_dependency "base64url", "~> 1.0.1"
