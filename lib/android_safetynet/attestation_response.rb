@@ -76,7 +76,7 @@ module AndroidSafetynet
     end
 
     def valid_attestation_domain?
-      common_name = leaf_certificate&.subject&.to_a&.assoc('CN')
+      common_name = leaf_certificate.try(:subject).try(:to_a).assoc('CN')
 
       if common_name
         common_name[1] == VALID_SUBJECT_HOSTNAME

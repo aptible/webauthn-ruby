@@ -56,13 +56,13 @@ module WebAuthn
           attestation_certificate.subject.eql?(CERTIFICATE_EMPTY_NAME) &&
           valid_subject_alternative_name? &&
           certificate_in_use?(attestation_certificate) &&
-          extensions.find { |ext| ext.oid == 'basicConstraints' }&.value == "CA:FALSE" &&
-          extensions.find { |ext| ext.oid == "extendedKeyUsage" }&.value == OID_TCG_KP_AIK_CERTIFICATE
+          extensions.find { |ext| ext.oid == 'basicConstraints' }.try(:value) == "CA:FALSE" &&
+          extensions.find { |ext| ext.oid == "extendedKeyUsage" }.try(:value) == OID_TCG_KP_AIK_CERTIFICATE
       end
 
       def valid_subject_alternative_name?
         extension = attestation_certificate.extensions.detect { |ext| ext.oid == "subjectAltName" }
-        return unless extension&.critical?
+        return unless extension.try(:critical?)
 
         san_asn1 = OpenSSL::ASN1.decode(extension).find do |val|
           val.tag_class == :UNIVERSAL && val.tag == OpenSSL::ASN1::OCTET_STRING

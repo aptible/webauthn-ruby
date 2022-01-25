@@ -18,7 +18,7 @@ class MDSFinder
         fido_metadata_store.fetch_statement(attestation_certificate_key_id: attestation_certificate_key_id)
       end
 
-    metadata_statement&.attestation_root_certificates || []
+    metadata_statement.try(:attestation_root_certificates) || []
   end
 
   private

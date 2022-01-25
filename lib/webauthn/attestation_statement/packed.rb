@@ -54,7 +54,7 @@ module WebAuthn
       end
 
       def valid_ec_public_keys?(credential)
-        (certificates&.map(&:public_key) || [credential.public_key_object])
+        (certificates.map(&:public_key) || [credential.public_key_object])
           .select { |pkey| pkey.is_a?(OpenSSL::PKey::EC) }
           .all? { |pkey| pkey.check_key }
       end
@@ -66,8 +66,8 @@ module WebAuthn
 
           attestation_certificate.version == 2 &&
             certificate_in_use?(attestation_certificate) &&
-            subject.assoc('OU')&.at(1) == "Authenticator Attestation" &&
-            attestation_certificate.extensions.find { |ext| ext.oid == 'basicConstraints' }&.value == 'CA:FALSE'
+            subject.assoc('OU').try(:at, 1) == "Authenticator Attestation" &&
+            attestation_certificate.extensions.find { |ext| ext.oid == 'basicConstraints' }.try(:value) == 'CA:FALSE'
         else
           true
         end
@@ -82,7 +82,7 @@ module WebAuthn
       def valid_signature?(authenticator_data, client_data_hash)
         signature_verifier = WebAuthn::SignatureVerifier.new(
           algorithm,
-          attestation_certificate&.public_key || authenticator_data.credential.public_key_object
+          attestation_certificate.try(:public_key) || authenticator_data.credential.public_key_object
         )
 
         signature_verifier.verify(signature, authenticator_data.data + client_data_hash)

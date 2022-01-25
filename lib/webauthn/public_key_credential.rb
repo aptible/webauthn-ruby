@@ -30,7 +30,7 @@ module WebAuthn
     end
 
     def sign_count
-      response&.authenticator_data&.sign_count
+      response.try(:authenticator_data).try(:sign_count)
     end
 
     private

@@ -24,7 +24,7 @@ module WebAuthn
     end
 
     def raw_public_key
-      response&.authenticator_data&.credential&.public_key
+      response.try(:authenticator_data).try(:credential).try(:public_key)
     end
   end
 end

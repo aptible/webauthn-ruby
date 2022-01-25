@@ -74,7 +74,7 @@ module WebAuthn
     end
 
     def attestation_certificate_key
-      raw_subject_key_identifier(attestation_statement.attestation_certificate)&.unpack("H*")&.[](0)
+      raw_subject_key_identifier(attestation_statement.attestation_certificate).try(:unpack, "H*").[](0)
     end
 
     private

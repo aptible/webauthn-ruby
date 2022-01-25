@@ -27,7 +27,7 @@ module WebAuthn
       end
 
       def attestation_certificate
-        certificates&.first
+        certificates.try(:first)
       end
 
       def certificate_chain
@@ -41,7 +41,7 @@ module WebAuthn
       attr_reader :statement
 
       def matching_aaguid?(attested_credential_data_aaguid)
-        extension = attestation_certificate&.extensions&.detect { |ext| ext.oid == AAGUID_EXTENSION_OID }
+        extension = attestation_certificate.try(:extensions).try(:detect, { |ext| ext.oid == AAGUID_EXTENSION_OID })
         if extension
           # `extension.value` mangles data into ASCII, so we must manually compare bytes
           # see https://github.com/ruby/openssl/pull/234
@@ -53,7 +53,7 @@ module WebAuthn
       end
 
       def certificates
-        @certificates ||= raw_certificates&.map do |raw_certificate|
+        @certificates ||= raw_certificates.map do |raw_certificate|
           OpenSSL::X509::Certificate.new(raw_certificate)
         end
       end
@@ -75,7 +75,7 @@ module WebAuthn
       end
 
       def attestation_trust_path
-        if certificates&.any?
+        if certificates.try(:any?)
           certificates
         end
       end
