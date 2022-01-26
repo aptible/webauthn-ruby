@@ -83,7 +83,13 @@ module WebAuthn
     attr_reader :credentials
 
     def new_credential
-      [SecureRandom.random_bytes(16), OpenSSL::PKey::EC.new("prime256v1").generate_key, 0]
+      key = OpenSSL::PKey::EC.new('prime256v1').tap do |ec|
+        ec.generate_key
+        # https://bugs.ruby-lang.org/issues/8177
+        ec.define_singleton_method(:private?) { private_key? }
+        ec.define_singleton_method(:public?) { public_key? }
+      end
+      [SecureRandom.random_bytes(16), key, 0]
     end
 
     def hashed(target)

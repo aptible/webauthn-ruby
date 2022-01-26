@@ -15,7 +15,12 @@ module WebAuthn
         rp_id_hash:,
         credential: {
           id: SecureRandom.random_bytes(16),
-          public_key: OpenSSL::PKey::EC.new("prime256v1").generate_key.public_key
+          public_key: OpenSSL::PKey::EC.new('prime256v1').tap do |ec|
+            ec.generate_key
+            # https://bugs.ruby-lang.org/issues/8177
+            ec.define_singleton_method(:private?) { private_key? }
+            ec.define_singleton_method(:public?) { public_key? }
+          end.public_key
         },
         sign_count: 0,
         user_present: true,
