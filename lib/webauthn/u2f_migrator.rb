@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'base64url'
 require 'webauthn/fake_client'
 require 'webauthn/attestation_statement/fido_u2f'
 
@@ -47,7 +48,7 @@ module WebAuthn
     # https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-client-to-authenticator-protocol-v2.0-rd-20180702.html#u2f-authenticatorMakeCredential-interoperability
     # Let credentialId be a credentialIdLength byte array initialized with CTAP1/U2F response key handle bytes.
     def credential_id
-      Base64.urlsafe_decode64(@key_handle)
+      Base64URL.decode(@key_handle)
     end
 
     # Let x9encodedUserPublicKey be the user public key returned in the U2F registration response message [U2FRawMsgs].
