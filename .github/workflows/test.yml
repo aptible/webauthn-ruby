@@ -1,0 +1,35 @@
+name: build
+
+on:  
+  push:
+    branches:
+      - aptible-v2
+  pull_request:
+    barnches:
+      - aptible-v2
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - '2.7'
+          - '2.6'
+          - '2.5'
+          - '2.3'
+        gemfile:
+          - cose_head
+          - openssl_head
+          - openssl_2_1
+          - openssl_2_0
+    env:
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rake
